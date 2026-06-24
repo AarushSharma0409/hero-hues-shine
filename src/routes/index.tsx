@@ -121,9 +121,8 @@ function Index() {
       <main className="relative z-10">
         <Hero onGetStarted={() => uploadRef.current?.scrollIntoView({ behavior: "smooth" })} />
         <section ref={uploadRef}>
-          <UploadSection />
+          <Workspace />
         </section>
-        <ChatSection />
       </main>
     </div>
   );
