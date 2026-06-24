@@ -203,6 +203,33 @@ function UploadSection() {
   const [dragOver, setDragOver] = useState(false);
   const [progress, setProgress] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [highlighted, setHighlighted] = useState<string[]>([]);
+  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  useEffect(() => {
+    const onHighlight = (e: Event) => {
+      const sources = ((e as CustomEvent).detail?.sources ?? []) as string[];
+      const norm = (s: string) => s.toLowerCase().split(/[\\/]/).pop()!.trim();
+      const wanted = sources.map(norm);
+      const matchedIds = docs
+        .filter((d) => wanted.includes(norm(d.name)))
+        .map((d) => d.id);
+      setHighlighted(matchedIds);
+      if (matchedIds[0]) {
+        cardRefs.current[matchedIds[0]]?.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        });
+      }
+    };
+    const onClear = () => setHighlighted([]);
+    window.addEventListener("docmind:highlight", onHighlight);
+    window.addEventListener("docmind:highlight-clear", onClear);
+    return () => {
+      window.removeEventListener("docmind:highlight", onHighlight);
+      window.removeEventListener("docmind:highlight-clear", onClear);
+    };
+  }, [docs]);
 
   useEffect(() => {
     fetch(`${API_BASE}/documents/`)
@@ -305,11 +332,17 @@ function UploadSection() {
             {docs.map((doc) => (
               <motion.div
                 key={doc.id}
+                ref={(el) => { cardRefs.current[doc.id] = el; }}
                 layout
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="flex items-center justify-between rounded-xl border border-slate-700 bg-slate-800/60 backdrop-blur-sm p-3"
+                className={cn(
+                  "flex items-center justify-between rounded-xl border bg-slate-800/60 backdrop-blur-sm p-3 transition-all duration-300",
+                  highlighted.includes(doc.id)
+                    ? "border-violet-400/80 bg-violet-500/10 shadow-[0_0_30px_rgba(139,92,246,0.45)] ring-1 ring-violet-400/40"
+                    : "border-slate-700"
+                )}
               >
                 <div className="flex items-center gap-3">
                   <FileText className="h-5 w-5 text-violet-400" />
