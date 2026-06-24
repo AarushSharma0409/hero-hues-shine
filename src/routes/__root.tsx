@@ -77,14 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "docmind" },
+      { name: "description", content: "AI Powerhouse Hero creates a full-screen dark hero section with a looping background video, dynamic content, and a brand logo marquee." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "docmind" },
+      { property: "og:description", content: "AI Powerhouse Hero creates a full-screen dark hero section with a looping background video, dynamic content, and a brand logo marquee." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "docmind" },
+      { name: "twitter:description", content: "AI Powerhouse Hero creates a full-screen dark hero section with a looping background video, dynamic content, and a brand logo marquee." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/965e8e1c-b7cd-4c7f-820b-840ba16a2303/id-preview-4db1f95b--d34a07fd-7622-459b-b68c-bd2a3fc32688.lovable.app-1782275899054.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/965e8e1c-b7cd-4c7f-820b-840ba16a2303/id-preview-4db1f95b--d34a07fd-7622-459b-b68c-bd2a3fc32688.lovable.app-1782275899054.png" },
     ],
     links: [
       {
