@@ -204,6 +204,22 @@ function UploadSection() {
   const [progress, setProgress] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    fetch(`${API_BASE}/documents/`)
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data) => {
+        const list: Doc[] = Array.isArray(data)
+          ? data.map((d: any, i: number) => ({
+              id: String(d.id ?? d._id ?? d.name ?? i),
+              name: d.filename ?? d.name ?? `document-${i}`,
+              size: Number(d.size ?? 0),
+            }))
+          : [];
+        if (list.length) setDocs(list);
+      })
+      .catch(() => {});
+  }, []);
+
   const uploadFile = useCallback(async (file: File) => {
     const id = crypto.randomUUID();
     setProgress(0);
@@ -234,18 +250,13 @@ function UploadSection() {
   };
 
   return (
-    <section className="px-6 py-24">
-      <div className="mx-auto max-w-3xl">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="font-display text-4xl md:text-5xl text-foreground text-center"
-          style={{ letterSpacing: "-0.02em" }}
-        >
-          Upload your documents
-        </motion.h2>
-        <p className="mt-3 text-center text-foreground/70">PDF, DOCX, or TXT. Drag and drop or click to browse.</p>
+    <div className="flex h-full flex-col rounded-2xl border border-slate-700 bg-slate-900/40 backdrop-blur-md p-6">
+      <div>
+        <h2 className="font-display text-2xl text-foreground" style={{ letterSpacing: "-0.02em" }}>
+          Documents
+        </h2>
+        <p className="mt-1 text-sm text-foreground/60">PDF, DOCX, or TXT. Drag and drop or click to browse.</p>
+      </div>
 
         <motion.div
           onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
@@ -258,8 +269,8 @@ function UploadSection() {
           onClick={() => inputRef.current?.click()}
           animate={dragOver ? { scale: 1.02 } : { scale: 1 }}
           className={cn(
-            "mt-10 cursor-pointer rounded-2xl border-2 border-dashed p-12 text-center transition-all",
-            "bg-slate-900/40 backdrop-blur-sm",
+            "mt-4 cursor-pointer rounded-2xl border-2 border-dashed p-8 text-center transition-all",
+            "bg-slate-900/30 backdrop-blur-sm",
             dragOver
               ? "border-violet-400 shadow-[0_0_60px_rgba(139,92,246,0.5)] animate-pulse"
               : "border-slate-700 hover:border-violet-500/60 hover:shadow-[0_0_40px_rgba(139,92,246,0.25)]"
@@ -273,13 +284,13 @@ function UploadSection() {
             className="hidden"
             onChange={(e) => handleFiles(e.target.files)}
           />
-          <Upload className="mx-auto h-12 w-12 text-violet-400" />
-          <p className="mt-4 text-lg text-foreground">Drop files here or click to upload</p>
-          <p className="mt-1 text-sm text-foreground/60">Up to 25MB per file</p>
+          <Upload className="mx-auto h-10 w-10 text-violet-400" />
+          <p className="mt-3 text-base text-foreground">Drop files here or click to upload</p>
+          <p className="mt-1 text-xs text-foreground/60">Up to 25MB per file</p>
         </motion.div>
 
         {progress !== null && (
-          <div className="mt-6 h-2 w-full overflow-hidden rounded-full bg-slate-800">
+          <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-slate-800">
             <motion.div
               className="h-full bg-gradient-to-r from-violet-500 to-indigo-400"
               initial={{ width: 0 }}
@@ -289,7 +300,7 @@ function UploadSection() {
           </div>
         )}
 
-        <div className="mt-8 space-y-3">
+        <div className="mt-6 flex-1 space-y-3 overflow-y-auto pr-1">
           <AnimatePresence>
             {docs.map((doc) => (
               <motion.div
@@ -298,13 +309,15 @@ function UploadSection() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="flex items-center justify-between rounded-xl border border-slate-700 bg-slate-800/60 backdrop-blur-sm p-4"
+                className="flex items-center justify-between rounded-xl border border-slate-700 bg-slate-800/60 backdrop-blur-sm p-3"
               >
                 <div className="flex items-center gap-3">
                   <FileText className="h-5 w-5 text-violet-400" />
-                  <div>
-                    <p className="text-sm font-medium text-foreground">{doc.name}</p>
-                    <p className="text-xs text-foreground/60">{(doc.size / 1024).toFixed(1)} KB</p>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium text-foreground">{doc.name}</p>
+                    {doc.size > 0 && (
+                      <p className="text-xs text-foreground/60">{(doc.size / 1024).toFixed(1)} KB</p>
+                    )}
                   </div>
                 </div>
                 <button
@@ -316,9 +329,11 @@ function UploadSection() {
               </motion.div>
             ))}
           </AnimatePresence>
+          {docs.length === 0 && (
+            <p className="pt-8 text-center text-sm text-foreground/40">No documents yet.</p>
+          )}
         </div>
-      </div>
-    </section>
+    </div>
   );
 }
 
@@ -370,20 +385,13 @@ function ChatSection() {
   };
 
   return (
-    <section className="px-6 pb-24">
-      <div className="mx-auto max-w-3xl">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="font-display text-4xl md:text-5xl text-foreground text-center"
-          style={{ letterSpacing: "-0.02em" }}
-        >
-          Ask your documents
-        </motion.h2>
-
-        <div className="mt-10 rounded-2xl border border-slate-700 bg-slate-900/50 backdrop-blur-md">
-          <div className="flex h-[480px] flex-col gap-4 overflow-y-auto p-6">
+    <div className="flex h-full flex-col rounded-2xl border border-slate-700 bg-slate-900/50 backdrop-blur-md">
+      <div className="border-b border-slate-700 p-4">
+        <h2 className="font-display text-2xl text-foreground" style={{ letterSpacing: "-0.02em" }}>
+          Chat
+        </h2>
+      </div>
+      <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-6">
             {messages.length === 0 && !loading && (
               <div className="m-auto text-center text-foreground/50">
                 <p>Ask a question about your uploaded documents.</p>
@@ -396,9 +404,9 @@ function ChatSection() {
             </AnimatePresence>
             {loading && <TypingIndicator />}
             <div ref={endRef} />
-          </div>
+      </div>
 
-          <div className="flex items-center gap-2 border-t border-slate-700 p-4">
+      <div className="flex items-center gap-2 border-t border-slate-700 p-4">
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -413,7 +421,27 @@ function ChatSection() {
             >
               <Send className="h-4 w-4" />
             </button>
-          </div>
+      </div>
+    </div>
+  );
+}
+
+function Workspace() {
+  return (
+    <section className="px-6 py-16">
+      <div className="mx-auto max-w-7xl">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="font-display text-4xl md:text-5xl text-foreground text-center"
+          style={{ letterSpacing: "-0.02em" }}
+        >
+          Your workspace
+        </motion.h2>
+        <div className="mt-10 grid h-[680px] grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
+          <UploadSection />
+          <ChatSection />
         </div>
       </div>
     </section>
