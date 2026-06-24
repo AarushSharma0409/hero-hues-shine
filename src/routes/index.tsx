@@ -250,7 +250,7 @@ function UploadSection() {
   };
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-slate-700 bg-slate-900/40 backdrop-blur-md p-6">
+    <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-slate-900/15 backdrop-blur-[2px] p-6">
       <div>
         <h2 className="font-display text-2xl text-foreground" style={{ letterSpacing: "-0.02em" }}>
           Documents
@@ -385,7 +385,7 @@ function ChatSection() {
   };
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-slate-700 bg-slate-900/50 backdrop-blur-md">
+    <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-slate-900/15 backdrop-blur-[2px]">
       <div className="border-b border-slate-700 p-4">
         <h2 className="font-display text-2xl text-foreground" style={{ letterSpacing: "-0.02em" }}>
           Chat
@@ -504,32 +504,56 @@ function ConfidenceBadge({ level }: { level: "high" | "medium" | "low" }) {
 function Citations({ citations }: { citations: Citation[] }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="mt-3 border-t border-slate-700 pt-2">
+    <div className="mt-3 border-t border-white/10 pt-2">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1 text-xs text-foreground/70 hover:text-foreground"
+        aria-expanded={open}
+        className="group flex w-full items-center gap-1.5 rounded-md px-1 py-1 text-xs font-medium text-foreground/80 transition-colors hover:text-foreground"
       >
-        <motion.span animate={{ rotate: open ? 90 : 0 }}>
+        <motion.span
+          animate={{ rotate: open ? 90 : 0 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
+          className="inline-flex"
+        >
           <ChevronRight className="h-3.5 w-3.5" />
         </motion.span>
-        {citations.length} citation{citations.length === 1 ? "" : "s"}
+        <span>
+          {citations.length} source{citations.length === 1 ? "" : "s"}
+        </span>
+        <span className="ml-auto text-[10px] uppercase tracking-wider text-foreground/40 group-hover:text-foreground/60">
+          {open ? "Hide" : "Show"}
+        </span>
       </button>
       <AnimatePresence initial={false}>
         {open && (
           <motion.div
+            key="content"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+            transition={{ height: { duration: 0.3, ease: [0.16, 1, 0.3, 1] }, opacity: { duration: 0.2 } }}
             className="overflow-hidden"
           >
             <ul className="mt-2 space-y-1.5">
               {citations.map((c, i) => (
-                <li key={i} className="flex items-center gap-2 rounded-md bg-slate-900/60 px-2.5 py-1.5 text-xs text-foreground/80">
-                  <FileText className="h-3.5 w-3.5 text-violet-400" />
-                  <span className="truncate">{c.source}</span>
-                  {c.page != null && <span className="text-foreground/50">· p.{c.page}</span>}
-                </li>
+                <motion.li
+                  key={i}
+                  initial={{ opacity: 0, x: -6 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.05 + i * 0.04, duration: 0.25 }}
+                  className="flex items-center gap-2 rounded-md border border-white/5 bg-slate-900/40 px-2.5 py-1.5 text-xs text-foreground/85 hover:border-violet-400/30 hover:bg-slate-900/60 transition-colors"
+                >
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-violet-500/15 text-[10px] font-semibold text-violet-300">
+                    {i + 1}
+                  </span>
+                  <FileText className="h-3.5 w-3.5 shrink-0 text-violet-400" />
+                  <span className="truncate font-medium">{c.source}</span>
+                  {c.page != null && (
+                    <span className="ml-auto shrink-0 rounded bg-white/5 px-1.5 py-0.5 text-[10px] text-foreground/70">
+                      p. {c.page}
+                    </span>
+                  )}
+                </motion.li>
               ))}
             </ul>
           </motion.div>
