@@ -18,7 +18,9 @@ export const Route = createFileRoute("/")({
 const VIDEO_URL =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_065045_c44942da-53c6-4804-b734-f9e07fc22e08.mp4";
 
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE =
+  (import.meta.env.VITE_DOCMIND_API_BASE as string | undefined) ??
+  "http://127.0.0.1:8000";
 
 const NAV_ITEMS = [
   { label: "Features", hasChevron: true },
