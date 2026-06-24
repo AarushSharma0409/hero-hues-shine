@@ -536,6 +536,22 @@ function ConfidenceBadge({ level }: { level: "high" | "medium" | "low" }) {
 
 function Citations({ citations }: { citations: Citation[] }) {
   const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (open) {
+      window.dispatchEvent(
+        new CustomEvent("docmind:highlight", {
+          detail: { sources: citations.map((c) => c.source) },
+        })
+      );
+    } else {
+      window.dispatchEvent(new CustomEvent("docmind:highlight-clear"));
+    }
+  }, [open, citations]);
+  useEffect(() => {
+    return () => {
+      window.dispatchEvent(new CustomEvent("docmind:highlight-clear"));
+    };
+  }, []);
   return (
     <div className="mt-3 border-t border-white/10 pt-2">
       <button
