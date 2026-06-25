@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Upload, X, Send, FileText, ChevronRight, Home, FileStack, Layers, Scissors, Settings, Bell, MessageSquare, Plus, Image as ImageIcon, Paperclip, Smile, MoreHorizontal } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
