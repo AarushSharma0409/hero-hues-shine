@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Upload, X, Send, FileText, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Upload, X, Send, FileText, ChevronRight, Home, FileStack, Layers, Scissors, Settings, Bell, MessageSquare, Plus, Image as ImageIcon, Paperclip, Smile, MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -23,10 +22,12 @@ const API_BASE =
   "http://127.0.0.1:8000";
 
 const NAV_ITEMS = [
-  { label: "Features", hasChevron: true },
-  { label: "Upload", hasChevron: false },
-  { label: "Chat", hasChevron: false },
-  { label: "Docs", hasChevron: true },
+  { label: "Home", icon: Home },
+  { label: "Documents", icon: FileStack, active: true },
+  { label: "Documents", icon: FileStack },
+  { label: "Shaders", icon: Layers },
+  { label: "Cutting", icon: Scissors },
+  { label: "Settings", icon: Settings },
 ];
 
 function useVideoFadeLoop() {
@@ -80,10 +81,9 @@ type Message = {
 
 function Index() {
   const videoRef = useVideoFadeLoop();
-  const uploadRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="relative min-h-screen bg-background">
+    <div className="relative h-screen overflow-hidden bg-background text-foreground">
       <div className="fixed inset-0 z-0 overflow-hidden">
         <video
           ref={videoRef}
@@ -94,109 +94,58 @@ function Index() {
           className="absolute inset-0 h-full w-full object-cover"
           style={{ opacity: 0 }}
         />
-        <div className="absolute inset-0 bg-background/40" />
+        <div className="absolute inset-0 bg-[#0a0714]/70" />
+        <div className="pointer-events-none absolute -left-32 top-1/3 h-[480px] w-[480px] rounded-full bg-violet-600/25 blur-[120px]" />
+        <div className="pointer-events-none absolute right-0 bottom-0 h-[420px] w-[420px] rounded-full bg-indigo-600/20 blur-[120px]" />
       </div>
 
-      <header className="sticky top-0 z-30 backdrop-blur-md bg-background/30">
-        <nav className="flex items-center justify-between px-8 py-5">
-          <span className="font-display text-2xl font-semibold tracking-tight text-foreground">
-            DocMind
-          </span>
-          <div className="hidden items-center gap-8 md:flex">
-            {NAV_ITEMS.map((item) => (
-              <button
-                key={item.label}
-                className="inline-flex items-center gap-1 text-sm text-foreground/90 transition-colors hover:text-foreground"
-              >
-                {item.label}
-                {item.hasChevron && <ChevronDown className="h-4 w-4 opacity-70" />}
-              </button>
-            ))}
-          </div>
-          <Button variant="heroSecondary" className="rounded-full px-4 py-2">
-            Sign Up
-          </Button>
-        </nav>
-        <div className="h-px w-full bg-gradient-to-r from-transparent via-foreground/20 to-transparent" />
-      </header>
-
-      <main className="relative z-10">
-        <Hero onGetStarted={() => uploadRef.current?.scrollIntoView({ behavior: "smooth" })} />
-        <section ref={uploadRef}>
-          <Workspace />
-        </section>
+      <main className="relative z-10 h-full p-4 md:p-6">
+        <div className="mx-auto grid h-full max-w-[1400px] grid-cols-1 gap-4 md:grid-cols-[260px_minmax(0,1fr)]">
+          <Sidebar />
+          <ChatSection />
+        </div>
       </main>
     </div>
   );
 }
 
-function Hero({ onGetStarted }: { onGetStarted: () => void }) {
+function Sidebar() {
   return (
-    <section className="relative flex min-h-[calc(100vh-73px)] items-center justify-center overflow-hidden px-6">
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute left-1/4 top-1/3 h-96 w-96 rounded-full bg-violet-500/20 blur-3xl"
-        animate={{ x: [0, 60, 0], y: [0, -40, 0] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute right-1/4 bottom-1/3 h-[28rem] w-[28rem] rounded-full bg-indigo-500/15 blur-3xl"
-        animate={{ x: [0, -50, 0], y: [0, 40, 0] }}
-        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute top-1/2 left-1/2 h-[527px] w-[984px] -translate-x-1/2 -translate-y-1/2 bg-gray-950 opacity-70 blur-[82px]"
-      />
-
-      <div className="relative flex flex-col items-center text-center">
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: "easeOut" }}
-          className="font-display font-normal text-foreground"
-          style={{
-            fontSize: "clamp(48px, 9vw, 128px)",
-            lineHeight: 1.02,
-            letterSpacing: "-0.024em",
-          }}
-        >
-          <span>Ask Anything. </span>
-          <span
-            className="bg-clip-text text-transparent"
-            style={{
-              backgroundImage: "linear-gradient(to left, #6366f1, #a855f7, #fcd34d)",
-            }}
-          >
-            Cite Everything.
-          </span>
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
-          className="mt-6 max-w-xl text-lg leading-8 opacity-80"
-          style={{ color: "var(--color-hero-sub)" }}
-        >
-          Upload your documents. Get answers with exact source citations.
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.4 }}
-        >
-          <Button
-            onClick={onGetStarted}
-            variant="heroSecondary"
-            className="mt-8 rounded-full shadow-[0_0_40px_rgba(139,92,246,0.45)] hover:shadow-[0_0_60px_rgba(139,92,246,0.65)]"
-            style={{ padding: "24px 32px" }}
-          >
-            Get Started
-          </Button>
-        </motion.div>
+    <aside className="flex h-full flex-col rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl p-4">
+      <div className="flex items-center justify-between px-2 py-1">
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 shadow-[0_0_20px_rgba(139,92,246,0.5)]">
+            <FileText className="h-4 w-4 text-white" />
+          </div>
+          <span className="font-display text-base font-semibold tracking-tight">DocMind</span>
+        </div>
       </div>
-    </section>
+
+      <button className="mt-5 w-full rounded-xl bg-gradient-to-b from-[#6366f1] to-[#4f46e5] px-4 py-2.5 text-sm font-medium text-white shadow-[0_8px_24px_-8px_rgba(99,102,241,0.7)] hover:brightness-110 transition">
+        New chat
+      </button>
+
+      <nav className="mt-5 flex-1 space-y-1">
+        {NAV_ITEMS.map((item, i) => (
+          <button
+            key={i}
+            className={cn(
+              "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
+              item.active
+                ? "bg-white/[0.06] text-white ring-1 ring-white/10"
+                : "text-foreground/60 hover:bg-white/[0.04] hover:text-foreground"
+            )}
+          >
+            <item.icon className="h-4 w-4" />
+            {item.label}
+          </button>
+        ))}
+      </nav>
+
+      <button className="mt-4 w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-foreground/80 hover:bg-white/[0.06] transition">
+        Documents
+      </button>
+    </aside>
   );
 }
 
@@ -420,13 +369,22 @@ function ChatSection() {
   };
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-slate-900/15 backdrop-blur-[2px]">
-      <div className="border-b border-slate-700 p-4">
-        <h2 className="font-display text-2xl text-foreground" style={{ letterSpacing: "-0.02em" }}>
-          Chat
-        </h2>
+    <div className="flex h-full min-h-0 flex-col rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl">
+      <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+        <h2 className="font-display text-lg font-semibold tracking-tight">Chat</h2>
+        <div className="flex items-center gap-2">
+          <button className="rounded-lg p-2 text-foreground/60 hover:bg-white/[0.06] hover:text-foreground transition">
+            <MessageSquare className="h-4 w-4" />
+          </button>
+          <button className="rounded-lg p-2 text-foreground/60 hover:bg-white/[0.06] hover:text-foreground transition">
+            <Bell className="h-4 w-4" />
+          </button>
+          <button className="ml-2 inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-b from-[#6366f1] to-[#4f46e5] px-3 py-1.5 text-xs font-medium text-white shadow-[0_6px_18px_-6px_rgba(99,102,241,0.7)] hover:brightness-110 transition">
+            <Plus className="h-3.5 w-3.5" /> New chat
+          </button>
+        </div>
       </div>
-      <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-6">
+      <div className="flex flex-1 min-h-0 flex-col gap-4 overflow-y-auto p-6">
             {messages.length === 0 && !loading && (
               <div className="m-auto text-center text-foreground/50">
                 <p>Ask a question about your uploaded documents.</p>
@@ -441,45 +399,31 @@ function ChatSection() {
             <div ref={endRef} />
       </div>
 
-      <div className="flex items-center gap-2 border-t border-slate-700 p-4">
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && send()}
-              placeholder="Ask anything about your documents…"
-              className="flex-1 rounded-full bg-slate-800/70 px-5 py-3 text-sm text-foreground placeholder:text-foreground/40 outline-none focus:ring-2 focus:ring-violet-500/60"
-            />
-            <button
-              onClick={send}
-              disabled={loading || !input.trim()}
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-violet-500 text-white shadow-[0_0_30px_rgba(139,92,246,0.5)] transition-all hover:bg-violet-400 disabled:opacity-40 disabled:shadow-none"
-            >
-              <Send className="h-4 w-4" />
-            </button>
-      </div>
-    </div>
-  );
-}
-
-function Workspace() {
-  return (
-    <section className="px-6 py-16">
-      <div className="mx-auto max-w-7xl">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="font-display text-4xl md:text-5xl text-foreground text-center"
-          style={{ letterSpacing: "-0.02em" }}
-        >
-          Your workspace
-        </motion.h2>
-        <div className="mt-10 grid h-[680px] grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
-          <UploadSection />
-          <ChatSection />
+      <div className="m-4 rounded-2xl border border-white/10 bg-white/[0.03] p-3">
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && send()}
+          placeholder="Write a message…"
+          className="w-full bg-transparent px-2 py-2 text-sm text-foreground placeholder:text-foreground/40 outline-none"
+        />
+        <div className="mt-1 flex items-center justify-between">
+          <div className="flex items-center gap-1 text-foreground/50">
+            <button className="rounded-md p-1.5 hover:bg-white/[0.06] hover:text-foreground transition"><ImageIcon className="h-4 w-4" /></button>
+            <button className="rounded-md p-1.5 hover:bg-white/[0.06] hover:text-foreground transition"><Paperclip className="h-4 w-4" /></button>
+            <button className="rounded-md p-1.5 hover:bg-white/[0.06] hover:text-foreground transition"><Smile className="h-4 w-4" /></button>
+            <button className="rounded-md p-1.5 hover:bg-white/[0.06] hover:text-foreground transition"><MoreHorizontal className="h-4 w-4" /></button>
+          </div>
+          <button
+            onClick={send}
+            disabled={loading || !input.trim()}
+            className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-b from-[#6366f1] to-[#4f46e5] text-white shadow-[0_8px_24px_-8px_rgba(99,102,241,0.7)] transition hover:brightness-110 disabled:opacity-40 disabled:shadow-none"
+          >
+            <Send className="h-4 w-4" />
+          </button>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -496,8 +440,8 @@ function MessageBubble({ message }: { message: Message }) {
         className={cn(
           "max-w-[80%] rounded-2xl px-4 py-3 text-sm",
           isUser
-            ? "bg-violet-500 text-white"
-            : "bg-slate-800 border border-slate-700 text-foreground"
+            ? "bg-gradient-to-b from-[#7c75f5] to-[#6366f1] text-white shadow-[0_8px_24px_-12px_rgba(99,102,241,0.8)]"
+            : "bg-white/[0.04] border border-white/10 text-foreground backdrop-blur-md"
         )}
       >
         <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
