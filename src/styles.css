@@ -75,7 +75,7 @@
 
 :root {
   --radius: 0.625rem;
-  --background: hsl(260 87% 3%);
+  --background: #0a0714;
   --foreground: hsl(40 6% 95%);
   --hero-sub: hsl(40 6% 82%);
   --card: oklch(1 0 0);
