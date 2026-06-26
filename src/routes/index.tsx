@@ -98,7 +98,7 @@ function Index() {
           className="absolute inset-0 h-full w-full object-cover"
           style={{ opacity: 0 }}
         />
-        <div className="absolute inset-0 bg-[#0a0714]/75" />
+        <div className="absolute inset-0 bg-[#0a0714]/40" />
         <div className="pointer-events-none absolute -left-32 top-1/3 h-[480px] w-[480px] rounded-full bg-violet-600/25 blur-[120px]" />
         <div className="pointer-events-none absolute right-0 bottom-0 h-[420px] w-[420px] rounded-full bg-indigo-600/20 blur-[120px]" />
       </div>
@@ -121,7 +121,7 @@ function Index() {
 
 function GlobalHeader({ docsCount }: { docsCount: number }) {
   return (
-    <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 bg-white/[0.03] backdrop-blur-xl px-6">
+    <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 bg-white/[0.02] backdrop-blur-md px-6">
       <div className="flex items-center gap-2.5">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 shadow-[0_0_20px_rgba(139,92,246,0.5)]">
           <FileText className="h-4 w-4 text-white" />
@@ -245,7 +245,7 @@ function DocumentCenter({
   };
 
   return (
-    <aside className="flex h-full w-[400px] shrink-0 flex-col rounded-2xl border border-white/10 bg-slate-900/20 backdrop-blur-md p-5">
+    <aside className="flex h-full w-[400px] shrink-0 flex-col rounded-2xl border border-white/10 bg-slate-900/10 backdrop-blur-sm p-5">
       <div className="mb-4">
         <h2 className="font-display text-xl tracking-tight">Document Center</h2>
         <p className="mt-0.5 text-xs text-foreground/55">Manage your indexed knowledge base.</p>
@@ -267,7 +267,7 @@ function DocumentCenter({
         animate={dragOver ? { scale: 1.02 } : { scale: 1 }}
         className={cn(
           "cursor-pointer rounded-xl border-2 border-dashed p-6 text-center transition-all",
-          "bg-slate-900/30",
+          "bg-slate-900/15",
           dragOver
             ? "border-violet-400 shadow-[0_0_60px_rgba(139,92,246,0.5)]"
             : "border-slate-700 hover:border-violet-500/60 hover:shadow-[0_0_30px_rgba(139,92,246,0.2)]"
@@ -318,7 +318,7 @@ function DocumentCenter({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 className={cn(
-                  "flex items-center gap-2.5 rounded-lg border bg-slate-800/50 px-3 py-2 transition-all duration-300",
+                  "flex items-center gap-2.5 rounded-lg border bg-slate-800/25 px-3 py-2 transition-all duration-300",
                   highlighted.includes(doc.id)
                     ? "border-violet-400/80 bg-violet-500/10 shadow-[0_0_24px_rgba(139,92,246,0.4)] ring-1 ring-violet-400/40"
                     : "border-slate-700/70"
@@ -442,7 +442,7 @@ function InteractiveAssistant({ docs }: { docs: Doc[] }) {
     : QUICK_PROMPTS;
 
   return (
-    <section className="flex h-full min-h-0 flex-1 flex-col rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl">
+    <section className="flex h-full min-h-0 flex-1 flex-col rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-md">
       <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-violet-400" />
@@ -485,7 +485,7 @@ function InteractiveAssistant({ docs }: { docs: Doc[] }) {
       </div>
 
       {/* 6. Input bar */}
-      <div className="m-4 mt-2 flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] p-2">
+      <div className="m-4 mt-2 flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.02] p-2">
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -519,7 +519,7 @@ function MessageBubble({ message }: { message: Message }) {
           "max-w-[80%] rounded-2xl px-4 py-3 text-sm",
           isUser
             ? "bg-gradient-to-b from-[#7c75f5] to-[#6366f1] text-white shadow-[0_8px_24px_-12px_rgba(99,102,241,0.8)]"
-            : "bg-white/[0.04] border border-white/10 text-foreground backdrop-blur-md"
+            : "bg-white/[0.02] border border-white/10 text-foreground backdrop-blur-sm"
         )}
       >
         <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
@@ -631,7 +631,7 @@ function Citations({ citations }: { citations: Citation[] }) {
                   initial={{ opacity: 0, x: -6 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.05 + i * 0.04, duration: 0.25 }}
-                  className="flex items-center gap-2 rounded-md border border-white/5 bg-slate-900/40 px-2.5 py-1.5 text-xs text-foreground/85 hover:border-violet-400/30 hover:bg-slate-900/60 transition-colors"
+                  className="flex items-center gap-2 rounded-md border border-white/5 bg-slate-900/20 px-2.5 py-1.5 text-xs text-foreground/85 hover:border-violet-400/30 hover:bg-slate-900/40 transition-colors"
                 >
                   <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-violet-500/15 text-[10px] font-semibold text-violet-300">
                     {i + 1}
@@ -660,7 +660,7 @@ function TypingIndicator() {
       animate={{ opacity: 1, y: 0 }}
       className="flex justify-start"
     >
-      <div className="rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3">
+      <div className="rounded-2xl border border-slate-700 bg-slate-800/40 px-4 py-3">
         <div className="flex gap-1.5">
           {[0, 1, 2].map((i) => (
             <motion.span
