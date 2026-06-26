@@ -98,7 +98,7 @@ function Index() {
           className="absolute inset-0 h-full w-full object-cover"
           style={{ opacity: 0 }}
         />
-        <div className="absolute inset-0 bg-[#0a0714]/75" />
+        <div className="absolute inset-0 bg-[#0a0714]/40" />
         <div className="pointer-events-none absolute -left-32 top-1/3 h-[480px] w-[480px] rounded-full bg-violet-600/25 blur-[120px]" />
         <div className="pointer-events-none absolute right-0 bottom-0 h-[420px] w-[420px] rounded-full bg-indigo-600/20 blur-[120px]" />
       </div>
