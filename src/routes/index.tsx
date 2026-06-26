@@ -519,7 +519,7 @@ function MessageBubble({ message }: { message: Message }) {
           "max-w-[80%] rounded-2xl px-4 py-3 text-sm",
           isUser
             ? "bg-gradient-to-b from-[#7c75f5] to-[#6366f1] text-white shadow-[0_8px_24px_-12px_rgba(99,102,241,0.8)]"
-            : "bg-white/[0.04] border border-white/10 text-foreground backdrop-blur-md"
+            : "bg-white/[0.02] border border-white/10 text-foreground backdrop-blur-sm"
         )}
       >
         <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
@@ -631,7 +631,7 @@ function Citations({ citations }: { citations: Citation[] }) {
                   initial={{ opacity: 0, x: -6 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.05 + i * 0.04, duration: 0.25 }}
-                  className="flex items-center gap-2 rounded-md border border-white/5 bg-slate-900/40 px-2.5 py-1.5 text-xs text-foreground/85 hover:border-violet-400/30 hover:bg-slate-900/60 transition-colors"
+                  className="flex items-center gap-2 rounded-md border border-white/5 bg-slate-900/20 px-2.5 py-1.5 text-xs text-foreground/85 hover:border-violet-400/30 hover:bg-slate-900/40 transition-colors"
                 >
                   <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-violet-500/15 text-[10px] font-semibold text-violet-300">
                     {i + 1}
@@ -660,7 +660,7 @@ function TypingIndicator() {
       animate={{ opacity: 1, y: 0 }}
       className="flex justify-start"
     >
-      <div className="rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3">
+      <div className="rounded-2xl border border-slate-700 bg-slate-800/40 px-4 py-3">
         <div className="flex gap-1.5">
           {[0, 1, 2].map((i) => (
             <motion.span
