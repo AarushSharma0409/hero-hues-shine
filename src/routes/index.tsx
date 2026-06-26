@@ -121,7 +121,7 @@ function Index() {
 
 function GlobalHeader({ docsCount }: { docsCount: number }) {
   return (
-    <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 bg-white/[0.03] backdrop-blur-xl px-6">
+    <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 bg-white/[0.02] backdrop-blur-md px-6">
       <div className="flex items-center gap-2.5">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 shadow-[0_0_20px_rgba(139,92,246,0.5)]">
           <FileText className="h-4 w-4 text-white" />
@@ -245,7 +245,7 @@ function DocumentCenter({
   };
 
   return (
-    <aside className="flex h-full w-[400px] shrink-0 flex-col rounded-2xl border border-white/10 bg-slate-900/20 backdrop-blur-md p-5">
+    <aside className="flex h-full w-[400px] shrink-0 flex-col rounded-2xl border border-white/10 bg-slate-900/10 backdrop-blur-sm p-5">
       <div className="mb-4">
         <h2 className="font-display text-xl tracking-tight">Document Center</h2>
         <p className="mt-0.5 text-xs text-foreground/55">Manage your indexed knowledge base.</p>
@@ -267,7 +267,7 @@ function DocumentCenter({
         animate={dragOver ? { scale: 1.02 } : { scale: 1 }}
         className={cn(
           "cursor-pointer rounded-xl border-2 border-dashed p-6 text-center transition-all",
-          "bg-slate-900/30",
+          "bg-slate-900/15",
           dragOver
             ? "border-violet-400 shadow-[0_0_60px_rgba(139,92,246,0.5)]"
             : "border-slate-700 hover:border-violet-500/60 hover:shadow-[0_0_30px_rgba(139,92,246,0.2)]"
@@ -318,7 +318,7 @@ function DocumentCenter({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 className={cn(
-                  "flex items-center gap-2.5 rounded-lg border bg-slate-800/50 px-3 py-2 transition-all duration-300",
+                  "flex items-center gap-2.5 rounded-lg border bg-slate-800/25 px-3 py-2 transition-all duration-300",
                   highlighted.includes(doc.id)
                     ? "border-violet-400/80 bg-violet-500/10 shadow-[0_0_24px_rgba(139,92,246,0.4)] ring-1 ring-violet-400/40"
                     : "border-slate-700/70"
@@ -442,7 +442,7 @@ function InteractiveAssistant({ docs }: { docs: Doc[] }) {
     : QUICK_PROMPTS;
 
   return (
-    <section className="flex h-full min-h-0 flex-1 flex-col rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl">
+    <section className="flex h-full min-h-0 flex-1 flex-col rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-md">
       <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-violet-400" />
@@ -485,7 +485,7 @@ function InteractiveAssistant({ docs }: { docs: Doc[] }) {
       </div>
 
       {/* 6. Input bar */}
-      <div className="m-4 mt-2 flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] p-2">
+      <div className="m-4 mt-2 flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.02] p-2">
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
